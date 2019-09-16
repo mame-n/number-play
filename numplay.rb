@@ -11,9 +11,9 @@ end
   
 class Numplay
 
-  def initialize( org_array )
-    if org_array
-      @org = org_array
+  def initialize( fn = nil )
+    if fn
+      @org = readfile( fn )
     else
       @org = [
         [nil,nil,  6,nil,  5,nil,nil,nil,  9],
@@ -28,7 +28,15 @@ class Numplay
       ]
     end
   end
-  
+
+  def readfile( fn )
+    open( fn ) do |fp|
+      fp.each_line.map do |ln|
+        ln.split(",").map { |n| n.to_i }
+      end
+    end
+  end
+
   def main
     while @org.includes?( nil )
       sweep_array
@@ -67,8 +75,4 @@ class Numplay
       @org[y][x]
     end
   end
-end
-
-if __FILE__ == $0
-  pp Numplay.new( nil ).main
 end
