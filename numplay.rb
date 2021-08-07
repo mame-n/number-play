@@ -65,6 +65,38 @@ class Numplay
     false
   end
 
+  def all_rows_permutations2( h=80, base )
+    puts "h = #{h}"
+    return base if h == -1
+    
+    row = h / 9
+    col = h % 9
+    puts "row=#{row}, col=#{col}, h=#{h}"
+
+    if base[row][col] != 0
+      all_rows_permutations2( h - 1, base.dup )
+    else
+      (1..9).each do |candidate|
+        puts "h=#{h} ,Can=#{candidate}"
+        pp base
+        if dup_numbers2?( row, col, base, candidate )
+          puts "DUP"
+          next
+        end
+
+        base[row][col] = candidate
+        all_rows_permutations2( h - 1, base.dup )
+      end
+    end
+    base
+  end
+
+  def dup_numbers2?(row, col, base, candidate)
+    return base[row].include?(candidate) \
+    | base.transpose[col].include?(candidate) \
+    | numbers_square( row, col, base ).include?(candidate)
+  end
+
   def all_permutations()
     (0..8).map do |row|
       set_permutation( row, 0, [] )
